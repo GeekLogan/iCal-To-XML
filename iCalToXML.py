@@ -23,12 +23,14 @@ class EventWrapper(object):
         out += "</end>"
         return out
     def localize(self, now):
-        if type(self.start.tzinfo) is type(None):
-            self.start = self.start.replace(tzinfo=now.tzinfo)
-        if type(self.end.tzinfo) is type(None):
-            self.end = self.end.replace(tzinfo=now.tzinfo)
+        if type(self.start) is datetime:
+            if type(self.start.tzinfo) is type(None):
+                self.start = self.start.replace(tzinfo=now.tzinfo)
+        if type(self.end) is datetime:
+            if type(self.end.tzinfo) is type(None):
+                self.end = self.end.replace(tzinfo=now.tzinfo)
 
-def loadFileFromTextLink(url):
+def loadFileFromLink(url):
     file = urllib2.urlopen(url)
     file_text = ""
     for line in file:
@@ -36,7 +38,7 @@ def loadFileFromTextLink(url):
     cal = Calendar.from_ical(file_text)
     return cal
 
-def getAllEventWrappers(cal):
+def getAllEvents(cal):
     now = datetime.now(pytz.timezone("America/New_York"))
     today = date.today()
     MAX_YEAR = 2040
